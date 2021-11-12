@@ -1,0 +1,6 @@
+server:
+  port: 18080
+  servlet:
+    context-path: /ehcache3
+ehcache:
+  read-from-xml: true
