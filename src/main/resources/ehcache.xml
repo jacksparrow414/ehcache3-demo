@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache:config
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns:ehcache='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3 https://www.ehcache.org/schema/ehcache-core-3.9.xsd">
+<!--    整体配置文档：https://www.ehcache.org/documentation/3.9/xml.html-->
+    <ehcache:cache alias="demo">
+        <ehcache:key-type>java.lang.Long</ehcache:key-type>
+        <ehcache:value-type>com.example.ehcache.vo.DataVO</ehcache:value-type>
+        <ehcache:expiry>
+<!--            https://www.ehcache.org/documentation/3.9/expiry.html-->
+            <ehcache:tti unit="minutes">1</ehcache:tti>
+        </ehcache:expiry>
+<!--        listeners一定要放在resource标签之前-->
+<!--        有一个例子 https://www.baeldung.com/spring-boot-ehcache-->
+        <ehcache:listeners>
+            <ehcache:listener>
+                <ehcache:class>com.example.ehcache.config.CacheEventLogListener</ehcache:class>
+                <ehcache:event-firing-mode>ASYNCHRONOUS</ehcache:event-firing-mode>
+                <ehcache:event-ordering-mode>UNORDERED</ehcache:event-ordering-mode>
+<!--                定义多个监听事件-->
+                <ehcache:events-to-fire-on>CREATED</ehcache:events-to-fire-on>
+                <ehcache:events-to-fire-on>UPDATED</ehcache:events-to-fire-on>
+                <ehcache:events-to-fire-on>REMOVED</ehcache:events-to-fire-on>
+                <ehcache:events-to-fire-on>EXPIRED</ehcache:events-to-fire-on>
+            </ehcache:listener>
+        </ehcache:listeners>
+        <ehcache:resources>
+            <ehcache:heap unit="entries">10</ehcache:heap>
+        </ehcache:resources>
+    </ehcache:cache>
+</ehcache:config>
