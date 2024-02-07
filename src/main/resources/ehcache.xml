@@ -4,6 +4,7 @@
         xmlns:ehcache='http://www.ehcache.org/v3'
         xsi:schemaLocation="http://www.ehcache.org/v3 https://www.ehcache.org/schema/ehcache-core-3.9.xsd">
 <!--    整体配置文档：https://www.ehcache.org/documentation/3.9/xml.html-->
+<!--    https://www.ehcache.org/documentation/3.9/examples.html#xml-with-107-extension-->
     <ehcache:cache alias="demo">
         <ehcache:key-type>java.lang.Long</ehcache:key-type>
         <ehcache:value-type>com.example.ehcache.vo.DataVO</ehcache:value-type>

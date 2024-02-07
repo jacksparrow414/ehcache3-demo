@@ -1,9 +1,11 @@
 package com.example.ehcache.controller;
 
 import com.example.ehcache.config.EhcacheConfiguration;
+import com.example.ehcache.service.CacheService;
 import com.example.ehcache.vo.DataVO;
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 @RestController
@@ -24,6 +27,9 @@ public class CommonDataController {
 
     @Resource(name = "cacheManager")
     private CacheManager cacheManager;
+
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * curl -X GET http://localhost:18080/ehcache3/data/8
@@ -95,5 +101,17 @@ public class CommonDataController {
         Cache<Long, DataVO> cache = cacheManager.getCache(EhcacheConfiguration.CACHE_NAME, Long.class, DataVO.class);
         cache.remove(id);
         return "already deleted";
+    }
+
+    @PostMapping(path = "/createCache")
+    public String createCache(@RequestParam String cacheName) {
+        Cache<Long, DataVO> cache = cacheService.createCache(cacheName, Long.class, DataVO.class);
+        return "create cache success";
+    }
+
+    @GetMapping(path = "/isCacheExist")
+    public boolean isCacheExist(@RequestParam String cacheName) {
+        Cache<Long, DataVO> cache = cacheManager.getCache(cacheName, Long.class, DataVO.class);
+        return Optional.ofNullable(cache).isPresent();
     }
 }
