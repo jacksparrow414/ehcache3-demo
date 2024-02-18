@@ -103,12 +103,22 @@ public class CommonDataController {
         return "already deleted";
     }
 
+    /**
+     * curl -X POST http://localhost:18080/ehcache3/data/createCache?cacheName=cache2
+     * @param cacheName
+     * @return
+     */
     @PostMapping(path = "/createCache")
     public String createCache(@RequestParam String cacheName) {
         Cache<Long, DataVO> cache = cacheService.createCache(cacheName, Long.class, DataVO.class);
         return "create cache success";
     }
 
+    /**
+     * curl -X GET http://localhost:18080/ehcache3/data/isCacheExist?cacheName=cache2
+     * @param cacheName
+     * @return
+     */
     @GetMapping(path = "/isCacheExist")
     public boolean isCacheExist(@RequestParam String cacheName) {
         Cache<Long, DataVO> cache = cacheManager.getCache(cacheName, Long.class, DataVO.class);
