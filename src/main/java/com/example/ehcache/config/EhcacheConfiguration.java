@@ -33,6 +33,9 @@ public class EhcacheConfiguration {
     @Value("${ehcache.read-from-xml}")
     private Boolean readFromXml;
 
+    @Value("${ehcache.init-cache}")
+    private Boolean initCache;
+
     /**
      * 过期策略
      * no expiry
@@ -73,16 +76,20 @@ public class EhcacheConfiguration {
     }
 
     public CacheManager initCacheManagerFromProgrammatic(CacheEventListener<Object, Object> cacheEventListener) {
-        return CacheManagerBuilder.newCacheManagerBuilder()
-                .withCache(CACHE_NAME,
-                        CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, DataVO.class, ResourcePoolsBuilder.heap(2))
-                                // 过期策略只能选一种，存在多种，后面的覆盖前面的
-                                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(30)))
-                                .withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(2)))
-                                .withExpiry(ExpiryPolicy.NO_EXPIRY)
-                                // 配置监听器
-                                .withService(initCacheEventListenerConfigurationBuilder(cacheEventListener)))
-                .build(true);
+        if (initCache) {
+            return CacheManagerBuilder.newCacheManagerBuilder()
+                    .withCache(CACHE_NAME,
+                            CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, DataVO.class, ResourcePoolsBuilder.heap(2))
+                                    // 过期策略只能选一种，存在多种，后面的覆盖前面的
+                                    .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(30)))
+                                    .withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(2)))
+                                    .withExpiry(ExpiryPolicy.NO_EXPIRY)
+                                    // 配置监听器
+                                    .withService(initCacheEventListenerConfigurationBuilder(cacheEventListener)))
+                    .build(true);
+        }else {
+            return CacheManagerBuilder.newCacheManagerBuilder().build();
+        }
     }
 
     /**

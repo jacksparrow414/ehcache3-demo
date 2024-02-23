@@ -3,4 +3,5 @@ server:
   servlet:
     context-path: /ehcache3
 ehcache:
-  read-from-xml: true
+  read-from-xml: false
+  init-cache: false
